@@ -17,7 +17,26 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showTooltip: false,
+    }
+    this.openTooltip = this.openTooltip.bind(this);
+  }
+
+  openTooltip() {
+    console.log(28,this.state.showTooltip)
+    if (this.state.showTooltip) {
+      this.setState({ showTooltip: false });
+
+    } else {
+      this.setState({ showTooltip: true });
+    }
+  }
+//Picking up your order in the store helps cut costs, and we pass the savings on to you. 
   render() {
+    let z =  this.state.showTooltip ? <Text>Picking up your order in the store helps cut costs, and we pass the savings on to you.</Text> : <Text></Text>
     return (
       <View style={styles.container}>
       
@@ -27,7 +46,11 @@ export default class HomeScreen extends React.Component {
             <Text>$100</Text>
           </View>
           <View style={styles.containerFlex}>
-            <Text>Pickup savings</Text>
+            <TouchableOpacity onPress={this.openTooltip}> 
+              <Text>Pickup savings</Text>
+            </TouchableOpacity>
+            <View>{z}</View>
+            
             <Text>$5</Text>
           </View>
           <View style={styles.containerFlex}>

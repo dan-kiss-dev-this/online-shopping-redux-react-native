@@ -21,8 +21,11 @@ export default class HomeScreen extends React.Component {
     super(props);
     this.state = {
       showTooltip: false,
+      seeItemDetails: false,
+      applyPromoCode: false,
     }
     this.openTooltip = this.openTooltip.bind(this);
+    this.openItemDetails = this.openItemDetails.bind(this);
   }
 
   openTooltip() {
@@ -34,9 +37,32 @@ export default class HomeScreen extends React.Component {
       this.setState({ showTooltip: true });
     }
   }
-//Picking up your order in the store helps cut costs, and we pass the savings on to you. 
+
+  openItemDetails() {
+    console.log(42,this.state.seeItemDetails)
+    if (this.state.seeItemDetails) {
+      this.setState({ seeItemDetails: false });
+
+    } else {
+      this.setState({ seeItemDetails: true });
+    }
+  }
+
   render() {
-    let z =  this.state.showTooltip ? <Text>Picking up your order in the store helps cut costs, and we pass the savings on to you.</Text> : <Text></Text>
+    let z =  this.state.showTooltip ? 
+      <Text>Picking up your order in the store helps cut costs, and we pass the savings on to you.</Text> : 
+      <Text></Text>;
+
+    const itemDetails = this.state.seeItemDetails ? 
+      <View>
+        <Text>Hide item details -</Text>
+        <Image 
+          source={{uri: 'https://i5.walmartimages.com/asr/efbbe595-fe1f-4a0f-83d6-4e7e58ec1ab8_1.d890d8d3725febe725d898487d05c39f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF'}}
+          style={{width: 66, height: 58}}
+        />
+      </View> : 
+      <Text>See item details +</Text>
+
     return (
       <View style={styles.container}>
       
@@ -62,7 +88,10 @@ export default class HomeScreen extends React.Component {
             <Text>$105</Text>
           </View>
           <View style={styles.containerFlex}>
-            <Text>See item details +</Text>
+            <TouchableOpacity onPress={this.openItemDetails}> 
+              {itemDetails}
+            </TouchableOpacity>
+            
           </View>
           <View style={styles.containerFlex}>
             <Text>Apply promo code +</Text>

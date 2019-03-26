@@ -114,17 +114,18 @@ class HomeScreen extends React.Component {
         <TextInput 
           onChangeText={(text)=> this.props.updateDiscountCode(text)}
           value={discountCode}
+          
           // value={`${priceFinal}`} 
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
         />
-        <Button title='myButton' onPress={this.applyPromoCode}></Button>
-      </View>  
+        <Button title='Apply' onPress={this.applyPromoCode}></Button>
+      </View>
       
 
     return (
       <View style={styles.container}>
       
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps='handled'>
           <View style={styles.containerFlex}>
             <Text>Subtotal</Text>
             <Text>${priceItem}</Text>

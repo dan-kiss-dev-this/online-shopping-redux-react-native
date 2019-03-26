@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Button,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -85,72 +84,98 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    const { showTooltip, seeItemDetails, enterPromoCode } = this.state;
+    // const { showTooltip, seeItemDetails, enterPromoCode } = this.state;
 
     const { objectInCart, discountCode } = this.props;
     const { name, details, imageURL, priceItem, tax, pickupSavings, priceFull, priceFinal, discountAmount } = objectInCart;
 
     console.log(64,this.state);
-    console.log(65,this.props)
-    let z =  this.state.showTooltip ? 
-      <Text>Picking up your order in the store helps cut costs, and we pass the savings on to you.</Text> : 
+    console.log(65,this.props);
+
+    const toolTip =  this.state.showTooltip ? 
+      <Text>
+        Picking up your order in the store helps cut costs, and we pass the savings on to you.
+      </Text> : 
       <Text></Text>;
 
     const itemDetails = this.state.seeItemDetails ? 
       <View>
-        <Text>Hide item details -</Text>
-        <Image 
-          source={{uri: this.props.objectInCart.imageURL}}
-          style={{width: 66, height: 58}}
-        />
-      </View> : 
-      <Text>See item details +</Text>
+        <View style={styles.containerRow}>
+          <Text style={styles.underline}>Hide item details</Text>
+          <Text> -</Text>
+        </View>
+        <View style={styles.containerFlex}>
+          <Image 
+            source={{uri: this.props.objectInCart.imageURL}}
+            style={styles.containerImage}
+          />
+          <Text>{name}</Text>
+        </View>
+        <View style={styles.containerRowReverse}>
+          <Text style={styles.containerBold}>${priceItem}</Text>
+          <Text>Qty: 1</Text>
+        </View>
+      </View> :
+      <View style={styles.containerRow}>
+        <Text style={styles.underline}>See item details</Text>
+        <Text> +</Text>
+      </View> 
 
     const promoCode = this.state.enterPromoCode ?
-      <Text>Apply promo code +</Text> :
       <View>
-        <Text>Hide promo code -</Text>
+        <View style={styles.containerRow}>
+          <Text style={styles.underline}>Hide promo code</Text>
+          <Text> -</Text>
+        </View>
         <Text>Promo Code</Text>
-        <TextInput 
-          onChangeText={(text)=> this.props.updateDiscountCode(text)}
-          value={discountCode}
-          
-          // value={`${priceFinal}`} 
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-        />
-        <Button title='Apply' onPress={this.applyPromoCode}></Button>
+        <View style={styles.containerFlex}>
+          <TextInput 
+            onChangeText={(text)=> this.props.updateDiscountCode(text)}
+            value={discountCode}
+            style={styles.containerTextInput}
+          />
+          <TouchableOpacity onPress={this.applyPromoCode}>
+            <Text style={styles.containerButton}>Apply</Text>
+          </TouchableOpacity>
+        </View>
+      </View> :
+      <View style={styles.containerRow}>
+        <Text style={styles.underline}>Apply promo code</Text>
+        <Text> +</Text>
       </View>
       
 
     return (
       <View style={styles.container}>
       
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps='handled'>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <View style={styles.containerFlex}>
             <Text>Subtotal</Text>
-            <Text>${priceItem}</Text>
+            <Text style={styles.containerBold}>${priceItem}</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={this.openTooltip}> 
-              <Text>Pickup savings</Text>
+            <TouchableOpacity onPress={this.openTooltip} style={styles.containerFlex}> 
+              <Text style={styles.underline}>Pickup savings</Text>
+              <Text style={styles.containerBold}>-${pickupSavings}</Text>
             </TouchableOpacity>
-            <View>{z}</View>
+            <View>{toolTip}</View>
             
-            <Text>${pickupSavings}</Text>
           </View>
           <View style={styles.containerFlex}>
-            <Text>Est. taxes & fees (Based on 94085)</Text>
-            <Text>${tax}</Text>
+            <View>
+              <Text>Est. taxes & fees</Text>
+              <Text>(Based on 94085)</Text>
+            </View>
+            <Text style={styles.containerBold}>${tax}</Text>
           </View>
           <View style={styles.containerFlex}>
-            <Text>Est. total</Text>
-            <Text>${priceFinal}</Text>
+            <Text style={styles.containerBold}>Est. total</Text>
+            <Text style={styles.containerBold}>${priceFinal}</Text>
           </View>
           <View style={styles.containerFlex}>
             <TouchableOpacity onPress={this.openItemDetails}> 
               {itemDetails}
-            </TouchableOpacity>
-            
+            </TouchableOpacity>     
           </View>
           <View style={styles.containerFlex}>
             <TouchableOpacity onPress={this.openPromoCode}>
@@ -172,91 +197,52 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    margin: 10,
+    marginTop: 30,
+    padding: 10,
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    fontSize: 20,
   },
   containerFlex: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  containerRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
-  contentContainer: {
-    paddingTop: 30,
+  containerRowReverse: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  containerTextInput: {
+    height: 40, 
+    width: 200,
+    borderColor: 'gray', 
+    borderWidth: 1,
+    borderRadius: 2,
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+  containerButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: 'black',
+    padding: 10,
+    paddingLeft: 5,
+    marginLeft: 20,
+    height: 40,
+    fontWeight: 'bold',
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  containerImage: {
+    width: 120, 
+    height: 110,
   },
-  homeScreenFilename: {
-    marginVertical: 7,
+  containerBold: {
+    fontWeight: 'bold',
   },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  underline: {
+    textDecorationLine: 'underline',
   },
 });

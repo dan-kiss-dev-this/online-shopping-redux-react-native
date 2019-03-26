@@ -2,9 +2,9 @@ import { APPLY_DISCOUNT, UPDATE_DISCOUNT_CODE } from '../actions'
 
 const defaultState = {
     objectInCart: {
-      name: 'Fancy Chair',
+      name: 'Essentials by OFM Essentials Racecar-Style Leather Gaming Chair, Red',
       details: 'Details: this chair is so fancy, is comes in lots of cool colors and can be adjusted in over 12 ways. Great for coders.',
-      imageURL: 'https://i5.walmartimages.com/asr/efbbe595-fe1f-4a0f-83d6-4e7e58ec1ab8_1.d890d8d3725febe725d898487d05c39f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF',
+      imageURL: 'https://i5.walmartimages.com/asr/e73e1252-642c-4473-93ea-fd3b564a7027_1.3e81ea58fa3042452fe185129a4a865f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF',
       priceItem: 104.99,
       tax: 9.97,
       pickupSavings: 3.99,

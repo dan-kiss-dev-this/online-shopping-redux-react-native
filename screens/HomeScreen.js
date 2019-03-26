@@ -7,12 +7,27 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
+  Button,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
+import { connect } from 'react-redux';
+import { applyDiscount, updateDiscountCode } from '../actions/index';
+
+const mapStateToProps = state => (
+  state
+);
+
+const mapDispatchToProps = 
+  {
+    applyDiscount,
+    updateDiscountCode,
+  }
+
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -22,10 +37,12 @@ export default class HomeScreen extends React.Component {
     this.state = {
       showTooltip: false,
       seeItemDetails: false,
-      applyPromoCode: false,
+      enterPromoCode: false,
     }
     this.openTooltip = this.openTooltip.bind(this);
     this.openItemDetails = this.openItemDetails.bind(this);
+    this.openPromoCode = this.openPromoCode.bind(this);
+    this.applyPromoCode = this.applyPromoCode.bind(this);
   }
 
   openTooltip() {
@@ -48,7 +65,33 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  openPromoCode() {
+    console.log(65,this.state.enterPromoCode)
+    if (this.state.enterPromoCode) {
+      this.setState({ enterPromoCode: false });
+
+    } else {
+      this.setState({ enterPromoCode: true });
+    }
+  }
+
+  applyPromoCode() {
+    console.log(79)
+    // event.preventDefault();
+    if (this.props.discountCode === 'DISCOUNT') {
+      console.log(82)
+      this.props.applyDiscount(this.props.objectInCart.priceFinal);
+    }
+  }
+
   render() {
+    const { showTooltip, seeItemDetails, enterPromoCode } = this.state;
+
+    const { objectInCart, discountCode } = this.props;
+    const { name, details, imageURL, priceItem, tax, pickupSavings, priceFull, priceFinal, discountAmount } = objectInCart;
+
+    console.log(64,this.state);
+    console.log(65,this.props)
     let z =  this.state.showTooltip ? 
       <Text>Picking up your order in the store helps cut costs, and we pass the savings on to you.</Text> : 
       <Text></Text>;
@@ -57,11 +100,26 @@ export default class HomeScreen extends React.Component {
       <View>
         <Text>Hide item details -</Text>
         <Image 
-          source={{uri: 'https://i5.walmartimages.com/asr/efbbe595-fe1f-4a0f-83d6-4e7e58ec1ab8_1.d890d8d3725febe725d898487d05c39f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF'}}
+          source={{uri: this.props.objectInCart.imageURL}}
           style={{width: 66, height: 58}}
         />
       </View> : 
       <Text>See item details +</Text>
+
+    const promoCode = this.state.enterPromoCode ?
+      <Text>Apply promo code +</Text> :
+      <View>
+        <Text>Hide promo code -</Text>
+        <Text>Promo Code</Text>
+        <TextInput 
+          onChangeText={(text)=> this.props.updateDiscountCode(text)}
+          value={discountCode}
+          // value={`${priceFinal}`} 
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        />
+        <Button title='myButton' onPress={this.applyPromoCode}></Button>
+      </View>  
+      
 
     return (
       <View style={styles.container}>
@@ -69,23 +127,23 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.containerFlex}>
             <Text>Subtotal</Text>
-            <Text>$100</Text>
+            <Text>${priceItem}</Text>
           </View>
-          <View style={styles.containerFlex}>
+          <View>
             <TouchableOpacity onPress={this.openTooltip}> 
               <Text>Pickup savings</Text>
             </TouchableOpacity>
             <View>{z}</View>
             
-            <Text>$5</Text>
+            <Text>${pickupSavings}</Text>
           </View>
           <View style={styles.containerFlex}>
             <Text>Est. taxes & fees (Based on 94085)</Text>
-            <Text>$10</Text>
+            <Text>${tax}</Text>
           </View>
           <View style={styles.containerFlex}>
             <Text>Est. total</Text>
-            <Text>$105</Text>
+            <Text>${priceFinal}</Text>
           </View>
           <View style={styles.containerFlex}>
             <TouchableOpacity onPress={this.openItemDetails}> 
@@ -94,8 +152,12 @@ export default class HomeScreen extends React.Component {
             
           </View>
           <View style={styles.containerFlex}>
-            <Text>Apply promo code +</Text>
+            <TouchableOpacity onPress={this.openPromoCode}>
+              {promoCode}
+            </TouchableOpacity>
           </View>
+
+          
 
           <View style={styles.welcomeContainer}>
             <Image
@@ -175,6 +237,8 @@ export default class HomeScreen extends React.Component {
     );
   };
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

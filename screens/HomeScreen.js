@@ -87,7 +87,7 @@ class HomeScreen extends React.Component {
     // const { showTooltip, seeItemDetails, enterPromoCode } = this.state;
 
     const { objectInCart, discountCode } = this.props;
-    const { name, details, imageURL, priceItem, tax, pickupSavings, priceFull, priceFinal, discountAmount } = objectInCart;
+    const { name, details, imageURL, priceItem, quantity, tax, pickupSavings, priceItemWithPickup, priceFull, priceFinal, discountAmount } = objectInCart;
 
     console.log(64,this.state);
     console.log(65,this.props);
@@ -109,11 +109,14 @@ class HomeScreen extends React.Component {
             source={{uri: this.props.objectInCart.imageURL}}
             style={styles.containerImage}
           />
-          <Text>{name}</Text>
-        </View>
-        <View style={styles.containerRowReverse}>
-          <Text style={styles.containerBold}>${priceItem}</Text>
-          <Text>Qty: 1</Text>
+          <View >
+            <Text style={styles.containerFlexWidth}>{name}</Text>
+            <View style={styles.containerFlexWidthPriceQuantity}>
+              <Text style={styles.containerBold}>${priceItemWithPickup}</Text>
+              <Text>Qty: {quantity}</Text>
+            </View>
+              <Text style={styles.containerStrikeThrough}>${priceItem}</Text>
+          </View>
         </View>
       </View> :
       <View style={styles.containerRow}>
@@ -156,7 +159,7 @@ class HomeScreen extends React.Component {
           <View>
             <TouchableOpacity onPress={this.openTooltip} style={styles.containerFlex}> 
               <Text style={styles.underline}>Pickup savings</Text>
-              <Text style={styles.containerBold}>-${pickupSavings}</Text>
+              <Text style={styles.containerBoldRed}>-${pickupSavings}</Text>
             </TouchableOpacity>
             <View>{toolTip}</View>
             
@@ -168,6 +171,7 @@ class HomeScreen extends React.Component {
             </View>
             <Text style={styles.containerBold}>${tax}</Text>
           </View>
+          <View style={styles.containerLineBreak}></View>
           <View style={styles.containerFlex}>
             <Text style={styles.containerBold}>Est. total</Text>
             <Text style={styles.containerBold}>${priceFinal}</Text>
@@ -177,6 +181,7 @@ class HomeScreen extends React.Component {
               {itemDetails}
             </TouchableOpacity>     
           </View>
+          <View style={styles.containerLineBreak}></View>
           <View style={styles.containerFlex}>
             <TouchableOpacity onPress={this.openPromoCode}>
               {promoCode}
@@ -209,13 +214,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  containerFlexWidth: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '50%',
+  },
+  containerFlexWidthPriceQuantity: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '40%',
+  },
   containerRow: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-  },
-  containerRowReverse: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
   },
   containerTextInput: {
     height: 40, 
@@ -226,11 +237,11 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     backgroundColor: 'transparent',
-    borderRadius: 14,
+    borderRadius: 20,
     borderWidth: 2,
     borderColor: 'black',
     padding: 10,
-    paddingLeft: 5,
+    paddingLeft: 15,
     marginLeft: 20,
     height: 40,
     fontWeight: 'bold',
@@ -239,9 +250,23 @@ const styles = StyleSheet.create({
     width: 120, 
     height: 110,
   },
+  containerStrikeThrough: {
+    textDecorationLine: 'line-through', 
+    textDecorationStyle: 'solid',
+    color: 'gray',
+  },
   containerBold: {
     fontWeight: 'bold',
   },
+  containerBoldRed: {
+    fontWeight: 'bold',
+    color: 'red',
+  },
+  containerLineBreak: {
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+
   underline: {
     textDecorationLine: 'underline',
   },

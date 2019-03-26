@@ -93,10 +93,10 @@ class HomeScreen extends React.Component {
     console.log(65,this.props);
 
     const toolTip =  this.state.showTooltip ? 
-      <Text>
+      <Text style={styles.containerToolTip}>
         Picking up your order in the store helps cut costs, and we pass the savings on to you.
       </Text> : 
-      <Text></Text>;
+      null;
 
     const itemDetails = this.state.seeItemDetails ? 
       <View>
@@ -208,7 +208,15 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 0.5,
     borderColor: 'gray',
-    fontSize: 20,
+  },
+  containerToolTip: {
+    flex: 1,
+    backgroundColor: '#fff',
+    margin: 10,
+    padding: 10,
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: 'gray',
   },
   containerFlex: {
     flexDirection: 'row',
